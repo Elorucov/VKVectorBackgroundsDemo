@@ -163,21 +163,32 @@ namespace VKChatThemesV2Demo {
 
         private async void SetupSVGBackground(VectorBackgroundSource svg) {
             bool isModernWindows = ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7);
+            var scale = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+
+            double nw = svg.Width;
+            double nh = svg.Height;
 
             var response = await hc.GetAsync(new Uri(svg.Url));
             string xml = await response.Content.ReadAsStringAsync();
 
-            var scale = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
+            // Replacing width and height in svg (bad way)
+            if (scale > 1) {
+                nw = svg.Width * scale;
+                nh = svg.Height * scale;
+                xml = xml.Replace($"width=\"{svg.Width}\"", $"width=\"{nw}\"");
+                xml = xml.Replace($"height=\"{svg.Height}\"", $"height=\"{nh}\"");
+            }
+
             var compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
             var canvasDevice = CanvasDevice.GetSharedDevice();
             var doc = CanvasSvgDocument.LoadFromXml(canvasDevice, xml);
             var graphicsDevice = CanvasComposition.CreateCompositionGraphicsDevice(compositor, canvasDevice);
 
-            var drawingSurface = graphicsDevice.CreateDrawingSurface(new Size(svg.Width, svg.Height),
+            var drawingSurface = graphicsDevice.CreateDrawingSurface(new Size(nw, nh),
                 DirectXPixelFormat.B8G8R8A8UIntNormalized, DirectXAlphaMode.Premultiplied);
             using (var ds = CanvasComposition.CreateDrawingSession(drawingSurface)) {
                 ds.Clear(Colors.Transparent);
-                ds.DrawSvg(doc, new Size(svg.Width, svg.Height));
+                ds.DrawSvg(doc, new Size(nw, nh));
             }
 
             var surfaceBrush = compositor.CreateSurfaceBrush(drawingSurface);
