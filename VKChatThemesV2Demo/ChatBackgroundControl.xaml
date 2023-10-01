@@ -1,0 +1,24 @@
+﻿<UserControl
+    x:Class="VKChatThemesV2Demo.ChatBackgroundControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VKChatThemesV2Demo"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid x:Name="Root" SizeChanged="OnSizeChanged">
+        <Rectangle x:Name="Gradient"/>
+        <Grid x:Name="VectorColorsRoot">
+            <Viewbox Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Canvas x:Name="EllipsesRoot" Width="45" Height="80"/>
+            </Viewbox>
+        </Grid>
+        <Rectangle x:Name="BlurLayer"/>
+        <Rectangle x:Name="OpacityLayer"/>
+        <Rectangle x:Name="SVGBackgroundLayer"/>
+        <TextBlock x:Name="dbg" VerticalAlignment="Center" Margin="48"/>
+    </Grid>
+</UserControl>
