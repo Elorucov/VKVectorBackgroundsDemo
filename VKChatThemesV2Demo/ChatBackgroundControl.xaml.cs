@@ -130,6 +130,7 @@ namespace VKChatThemesV2Demo {
         }
 
         private void SetupBlur(Blur blur, bool hasEllipses) {
+            if (blur == null) return;
             dbg.Text = $"Opacity: {blur.Opacity}\nRadius: {blur.Radius}\nColor: {blur.Color}";
 
             OpacityLayer.Fill = new SolidColorBrush(ParseHex(blur.Color));
