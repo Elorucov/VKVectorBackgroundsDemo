@@ -19,6 +19,6 @@
         <Rectangle x:Name="BlurLayer"/>
         <Rectangle x:Name="OpacityLayer"/>
         <Rectangle x:Name="SVGBackgroundLayer"/>
-        <TextBlock x:Name="dbg" VerticalAlignment="Center" Margin="48"/>
+        <TextBlock x:Name="dbg" Visibility="Collapsed" VerticalAlignment="Center" Margin="48"/>
     </Grid>
 </UserControl>

@@ -20,7 +20,6 @@ using Microsoft.Graphics.Canvas.Svg;
 using Windows.UI.Popups;
 using Windows.Foundation.Metadata;
 using Windows.Graphics.Display;
-using Microsoft.Graphics.Canvas.UI.Xaml;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -42,6 +41,9 @@ namespace VKChatThemesV2Demo {
         CompositionEffectBrush brush;
         Blur blur; // for vector background
         HttpClient hc = new HttpClient();
+
+        const double RADIUS_DIVIDE = 3.3; // необходимо для уменьшения blur.radius у векторных фонов настолько,
+                                          // чтобы размытые круги как можно ближе соответствовало тем, как они отображаются в офклиенте
 
         public ChatBackgroundControl() {
             this.InitializeComponent();
@@ -81,7 +83,8 @@ namespace VKChatThemesV2Demo {
             if (source.Type == "vector") {
                 try {
                     SetupGradient(source.Vector.Gradient);
-                    SetupEllipses(source.Vector.ColorEllipses);
+                    double radius = source.Vector.Blur != null ? source.Vector.Blur.Radius : 0;
+                    SetupEllipses(source.Vector.ColorEllipses, radius);
                     SetupBlur(source.Vector.Blur, source.Vector.ColorEllipses.Count > 0);
                     SetupSVGBackground(source.Vector.SVG);
                 } catch (Exception ex) {
@@ -116,12 +119,14 @@ namespace VKChatThemesV2Demo {
             Gradient.Fill = brush;
         }
 
-        private void SetupEllipses(List<ColorEllipse> ellipses) {
+        private void SetupEllipses(List<ColorEllipse> ellipses, double blurRadius) {
+            blurRadius = blurRadius / RADIUS_DIVIDE;
             foreach (ColorEllipse e in ellipses) {
+                var color = ParseHex(e.Color);
                 Ellipse ellipse = new Ellipse {
-                    Width = e.RadiusX * EllipsesRoot.Width,
-                    Height = e.RadiusY * EllipsesRoot.Height,
-                    Fill = new SolidColorBrush(ParseHex(e.Color))
+                    Width = e.RadiusX * EllipsesRoot.Width + (blurRadius / 2),
+                    Height = e.RadiusY * EllipsesRoot.Height + (blurRadius / 2),
+                    Fill = new SolidColorBrush(color)
                 };
                 Canvas.SetLeft(ellipse, e.X * EllipsesRoot.Width - (ellipse.Width / 2));
                 Canvas.SetTop(ellipse, e.Y * EllipsesRoot.Height - (ellipse.Height / 2));
@@ -142,14 +147,14 @@ namespace VKChatThemesV2Demo {
             var visual = ElementCompositionPreview.GetElementVisual(BlurLayer);
             var compositor = visual.Compositor;
             blurVisual = compositor.CreateSpriteVisual();
-            blurVisual.Size = new System.Numerics.Vector2((float)ActualWidth, (float)ActualHeight);
+            blurVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
 
             // Blur amout more than 250 is not allowed in UWP!
             effect = new GaussianBlurEffect {
                 Name = "Blur",
-                BlurAmount = Math.Min((float)blur.Radius / 640f * (float)ActualWidth, 250f),
-                BorderMode = EffectBorderMode.Soft,
-                Optimization = EffectOptimization.Quality,
+                BlurAmount = Math.Min(((float)blur.Radius / (float)RADIUS_DIVIDE) / 640f * (float)ActualWidth, 250f),
+                BorderMode = EffectBorderMode.Hard,
+                Optimization = EffectOptimization.Speed,
                 Source = new CompositionEffectSourceParameter("source")
             };
 
@@ -257,7 +262,7 @@ namespace VKChatThemesV2Demo {
             if (blurVisual != null) {
                 blurVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
 
-                float blurAmount = Math.Min((float)blur.Radius / 640f * (float)ActualWidth, 250f);
+                float blurAmount = Math.Min(((float)blur.Radius / (float)RADIUS_DIVIDE) / 640f * (float)ActualWidth, 250f);
                 brush.Properties.InsertScalar("Blur.BlurAmount", blurAmount);
             }
 
