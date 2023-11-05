@@ -14,7 +14,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid Height="48">
+        <Grid x:Name="TBRoot" Height="48">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="56"/>
                 <ColumnDefinition/>
@@ -27,5 +27,6 @@
         <Border Grid.Row="1" Background="#000">
             <local:ChatBackgroundControl x:Name="cbc"/>
         </Border>
+        <HyperlinkButton Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Opacity="0" Click="HyperlinkButton_Click"/>
     </Grid>
 </Page>

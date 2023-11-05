@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Windows.ApplicationModel.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
@@ -22,6 +23,10 @@ namespace VKChatThemesV2Demo {
         }
 
         private async void MainPage_Loaded(object sender, RoutedEventArgs e) {
+            Window.Current.SizeChanged += (a, b) => {
+                TBRoot.Visibility = ApplicationView.GetForCurrentView().IsFullScreenMode ? Visibility.Collapsed : Visibility.Visible;
+            };
+
             HttpRequestMessage hmsg = new HttpRequestMessage(HttpMethod.Get, new Uri("https://elorucov.github.io/laney/v2/chat_styles.json"));
             HttpClient hc = new HttpClient();
             HttpResponseMessage response = await hc.SendRequestAsync(hmsg);
@@ -37,6 +42,14 @@ namespace VKChatThemesV2Demo {
 
         private void StylesCB_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             cbc.ChatStyle = (Style)StylesCB.SelectedItem;
+        }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e) {
+            if (ApplicationView.GetForCurrentView().IsFullScreenMode) {
+                ApplicationView.GetForCurrentView().ExitFullScreenMode();
+            } else {
+                ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+            }
         }
     }
 }
