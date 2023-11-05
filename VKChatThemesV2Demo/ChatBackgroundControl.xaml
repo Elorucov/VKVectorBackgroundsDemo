@@ -12,7 +12,10 @@
     <Grid x:Name="Root" SizeChanged="OnSizeChanged">
         <Rectangle x:Name="Gradient"/>
         <Grid x:Name="VectorColorsRoot">
-            <Viewbox Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox Stretch="Fill" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Viewbox.Clip>
+                    <RectangleGeometry x:Name="clipRec"/>
+                </Viewbox.Clip>
                 <Canvas x:Name="EllipsesRoot" Width="45" Height="80"/>
             </Viewbox>
         </Grid>

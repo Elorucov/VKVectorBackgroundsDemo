@@ -42,8 +42,8 @@ namespace VKChatThemesV2Demo {
         Blur blur; // for vector background
         HttpClient hc = new HttpClient();
 
-        const double RADIUS_DIVIDE = 3.3; // необходимо для уменьшения blur.radius у векторных фонов настолько,
-                                          // чтобы размытые круги как можно ближе соответствовало тем, как они отображаются в офклиенте
+        const double RADIUS_DIVIDE = 2.5; // необходимо для уменьшения blur.radius у векторных фонов настолько,
+                                        // чтобы размытые круги как можно ближе соответствовало тем, как они отображаются в офклиенте
 
         public ChatBackgroundControl() {
             this.InitializeComponent();
@@ -124,12 +124,12 @@ namespace VKChatThemesV2Demo {
             foreach (ColorEllipse e in ellipses) {
                 var color = ParseHex(e.Color);
                 Ellipse ellipse = new Ellipse {
-                    Width = e.RadiusX * EllipsesRoot.Width + (blurRadius / 2),
-                    Height = e.RadiusY * EllipsesRoot.Height + (blurRadius / 2),
+                    Width = e.RadiusX * EllipsesRoot.Width + (blurRadius / 2.5),
+                    Height = e.RadiusY * EllipsesRoot.Height + (blurRadius / 2.5),
                     Fill = new SolidColorBrush(color)
                 };
-                Canvas.SetLeft(ellipse, e.X * EllipsesRoot.Width - (ellipse.Width / 2));
-                Canvas.SetTop(ellipse, e.Y * EllipsesRoot.Height - (ellipse.Height / 2));
+                Canvas.SetLeft(ellipse, e.X * EllipsesRoot.Width - (ellipse.Width / 2.5));
+                Canvas.SetTop(ellipse, e.Y * EllipsesRoot.Height - (ellipse.Height / 2.5));
                 EllipsesRoot.Children.Add(ellipse);
             }
         }
@@ -259,6 +259,8 @@ namespace VKChatThemesV2Demo {
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
+            clipRec.Rect = new Rect(0, 0, VectorColorsRoot.ActualWidth, VectorColorsRoot.ActualHeight);
+
             if (blurVisual != null) {
                 blurVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
 
