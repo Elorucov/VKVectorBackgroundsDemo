@@ -218,7 +218,7 @@ namespace VKChatThemesV2Demo {
             fxBrush.SetSourceParameter("source", surfaceBrush);
 
             CompositionEffectBrush cebrush = fxBrush;
-            if (isModernWindows) {
+            if (isModernWindows && EllipsesRoot.Children.Count > 0) {
                 var blend = new BlendEffect {
                     Background = new CompositionEffectSourceParameter("Main"),
                     Foreground = new CompositionEffectSourceParameter("Tint"),
@@ -267,7 +267,7 @@ namespace VKChatThemesV2Demo {
         private void OnSizeChanged(object sender, SizeChangedEventArgs e) {
             clipRec.Rect = new Rect(0, 0, VectorColorsRoot.ActualWidth, VectorColorsRoot.ActualHeight);
 
-            if (blurVisual != null) {
+            if (blurVisual != null && blur != null) {
                 blurVisual.Size = new Vector2((float)ActualWidth, (float)ActualHeight);
 
                 float blurAmount = Math.Min(((float)blur.Radius / (float)RADIUS_DIVIDE) / 640f * (float)ActualWidth, 250f);
