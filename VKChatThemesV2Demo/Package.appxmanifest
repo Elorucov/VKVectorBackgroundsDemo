@@ -9,7 +9,7 @@
   <Identity
     Name="ELOR.VKVectorBackgroundsDemo"
     Publisher="CN=elor"
-    Version="1.0.20.0" />
+    Version="1.0.22.0" />
 
   <mp:PhoneIdentity PhoneProductId="b9b4a5bd-9fa4-48ee-960a-057d6f1049ff" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

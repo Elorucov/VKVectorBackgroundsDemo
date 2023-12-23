@@ -94,6 +94,8 @@ namespace VKChatThemesV2Demo {
         }
 
         private void SetupGradient(Gradient gradient) {
+            if (gradient == null) return;
+
             LinearGradientBrush brush = new LinearGradientBrush {
                 StartPoint = new Point(0.5, 0),
                 EndPoint = new Point(0.5, 1)
@@ -120,6 +122,8 @@ namespace VKChatThemesV2Demo {
         }
 
         private void SetupEllipses(List<ColorEllipse> ellipses, double blurRadius) {
+            if (ellipses == null || ellipses.Count == 0) return;
+
             blurRadius = blurRadius / RADIUS_DIVIDE;
             foreach (ColorEllipse e in ellipses) {
                 var color = ParseHex(e.Color);
@@ -168,6 +172,8 @@ namespace VKChatThemesV2Demo {
         }
 
         private async void SetupSVGBackground(VectorBackgroundSource svg) {
+            if (svg == null) return;
+
             bool isModernWindows = ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7);
             var scale = DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;
 
