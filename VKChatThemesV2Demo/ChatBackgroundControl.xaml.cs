@@ -193,7 +193,13 @@ namespace VKChatThemesV2Demo {
 
             var compositor = ElementCompositionPreview.GetElementVisual(this).Compositor;
             var canvasDevice = CanvasDevice.GetSharedDevice();
-            var doc = CanvasSvgDocument.LoadFromXml(canvasDevice, xml);
+            CanvasSvgDocument doc = null;
+            try {
+                doc = CanvasSvgDocument.LoadFromXml(canvasDevice, xml);
+            } catch (Exception ex) {
+                return;
+            }
+
             var graphicsDevice = CanvasComposition.CreateCompositionGraphicsDevice(compositor, canvasDevice);
 
             var drawingSurface = graphicsDevice.CreateDrawingSurface(new Size(nw, nh),
@@ -218,7 +224,7 @@ namespace VKChatThemesV2Demo {
             fxBrush.SetSourceParameter("source", surfaceBrush);
 
             CompositionEffectBrush cebrush = fxBrush;
-            if (isModernWindows && EllipsesRoot.Children.Count > 0) {
+            if (isModernWindows && EllipsesRoot.Children.Count > 0 && EllipsesRoot.Children.Count > 0) {
                 var blend = new BlendEffect {
                     Background = new CompositionEffectSourceParameter("Main"),
                     Foreground = new CompositionEffectSourceParameter("Tint"),
